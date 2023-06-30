@@ -200,13 +200,6 @@ int TLC5955::updateLeds(double* output_current)
   if (enforce_max_current && power_output_amps > max_current_amps)
     return 1;
 
-  // 0. comparity check is OK since we know all currents are positive
-  if (power_output_amps == 0.) {
-    analogWrite(_gsclk, 0);
-  } else {
-    analogWrite(_gsclk, 1);
-  }
-
   for (int16_t chip = (int8_t)_tlc_count - 1; chip >= 0; chip--)
   {
     setControlModeBit(CONTROL_MODE_OFF);
@@ -227,6 +220,13 @@ int TLC5955::updateLeds(double* output_current)
   }
 
   latch();
+
+  // 0. comparity check is OK since we know all currents are positive
+  if (power_output_amps == 0.) {
+    analogWrite(_gsclk, 0);
+  } else {
+    analogWrite(_gsclk, 1);
+  }
   return 0;
 }
 
