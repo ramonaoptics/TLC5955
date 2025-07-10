@@ -103,9 +103,9 @@ void TLC5955::setRgbPinOrder(uint8_t rPos, uint8_t grPos, uint8_t bPos)
 {
   if (COLOR_CHANNEL_COUNT == 3)
   {
-    for (int8_t chip = _tlc_count - 1; chip >= 0; chip--)
+    for (int32_t chip = _tlc_count; chip >= 0; chip--)
     {
-      for (int8_t channel = 0; channel < LEDS_PER_CHIP; channel++)
+      for (int32_t channel = 0; channel < LEDS_PER_CHIP; channel++)
       {
         _rgb_order[chip][channel][0] = rPos;
         _rgb_order[chip][channel][1] = grPos;
@@ -133,11 +133,11 @@ void TLC5955::setRgbPinOrderSingle(uint16_t led_number, uint8_t rPos, uint8_t gr
 
 void TLC5955::setAllLed(uint16_t gsvalue)
 {
-  for (int8_t chip = _tlc_count - 1; chip >= 0; chip--)
+  for (int32_t chip = _tlc_count - 1; chip >= 0; chip--)
   {
-    for (int8_t a = 0; a < LEDS_PER_CHIP; a++)
+    for (int32_t a = 0; a < LEDS_PER_CHIP; a++)
     {
-      for (int8_t b = 0; b < COLOR_CHANNEL_COUNT; b++)
+      for (int32_t b = 0; b < COLOR_CHANNEL_COUNT; b++)
         _grayscale_data[chip][a][b] = gsvalue;
     }
   }
@@ -147,9 +147,9 @@ void TLC5955::setAllLedRgb(uint16_t red, uint16_t green, uint16_t blue)
 {
   if (COLOR_CHANNEL_COUNT == 3)
   {
-    for (int8_t chip = _tlc_count - 1; chip >= 0; chip--)
+    for (int32_t chip = _tlc_count - 1; chip >= 0; chip--)
     {
-      for (int8_t channel = 0; channel < LEDS_PER_CHIP; channel++)
+      for (int32_t channel = 0; channel < LEDS_PER_CHIP; channel++)
       {
         _grayscale_data[chip][channel][2] = blue;
         _grayscale_data[chip][channel][1] = green;
@@ -200,14 +200,14 @@ int TLC5955::updateLeds(double* output_current)
   if (enforce_max_current && power_output_amps > max_current_amps)
     return 1;
 
-  for (int16_t chip = (int8_t)_tlc_count - 1; chip >= 0; chip--)
+  for (int32_t chip = _tlc_count - 1; chip >= 0; chip--)
   {
     setControlModeBit(CONTROL_MODE_OFF);
     SPI.beginTransaction(mSettings);
     uint8_t color_channel_ordered;
-    for (int8_t led_channel_index = (int8_t)LEDS_PER_CHIP - 1; led_channel_index >= 0; led_channel_index--)
+    for (int32_t led_channel_index = LEDS_PER_CHIP - 1; led_channel_index >= 0; led_channel_index--)
     {
-      for (int8_t color_channel_index = (int8_t)COLOR_CHANNEL_COUNT - 1; color_channel_index >= 0; color_channel_index--)
+      for (int32_t color_channel_index = COLOR_CHANNEL_COUNT - 1; color_channel_index >= 0; color_channel_index--)
       {
         color_channel_ordered = _rgb_order[chip][led_channel_index][(uint8_t) color_channel_index];
 
@@ -232,13 +232,13 @@ int TLC5955::updateLeds(double* output_current)
 
 void TLC5955::clearLeds()
 {
-    for (int16_t chip = (int8_t)_tlc_count - 1; chip >= 0; chip--)
+    for (int32_t chip = _tlc_count - 1; chip >= 0; chip--)
   {
     setControlModeBit(CONTROL_MODE_OFF);
     SPI.beginTransaction(mSettings);
-    for (int8_t led_channel_index = (int8_t)LEDS_PER_CHIP - 1; led_channel_index >= 0; led_channel_index--)
+    for (int32_t led_channel_index = LEDS_PER_CHIP - 1; led_channel_index >= 0; led_channel_index--)
     {
-      for (int8_t color_channel_index = (int8_t)COLOR_CHANNEL_COUNT - 1; color_channel_index >= 0; color_channel_index--)
+      for (int32_t color_channel_index = COLOR_CHANNEL_COUNT - 1; color_channel_index >= 0; color_channel_index--)
       {
         SPI.transfer16(0);
       }
