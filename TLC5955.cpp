@@ -103,7 +103,7 @@ void TLC5955::setRgbPinOrder(uint8_t rPos, uint8_t grPos, uint8_t bPos)
 {
   if (COLOR_CHANNEL_COUNT == 3)
   {
-    for (int32_t chip = _tlc_count; chip >= 0; chip--)
+    for (int32_t chip = _tlc_count - 1; chip >= 0; chip--)
     {
       for (int32_t channel = 0; channel < LEDS_PER_CHIP; channel++)
       {
